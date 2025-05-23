@@ -7,11 +7,13 @@ use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class PatientResource extends Resource
 {
@@ -23,25 +25,25 @@ class PatientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('type')
+                Forms\Components\Select::make('tipo')
                     ->options([
-                        'cat' => 'Gato',
-                        'dog' => 'Perro',
-                        'rabbit' => 'Conejo',
+                        'gato' => 'Gato',
+                        'perro' => 'Perro',
+                        'conejo' => 'Conejo',
                     ])
                     ->required(),
-                Forms\Components\DatePicker::make('date_of_birth')
+                Forms\Components\DatePicker::make('Fecha de cumpleaños')
                     ->required()
                     ->maxDate(now()),
-                Forms\Components\Select::make('owner_id')
-                    ->relationship('owner', 'name')
+                Forms\Components\Select::make('dueño_id')
+                    ->relationship('dueño', 'nombre')
                     ->searchable()
                     ->preload()
                     ->createOptionForm([
-                        Forms\Components\TextInput::make('name')
+                        Forms\Components\TextInput::make('Nombre')
                             ->required()
                             ->maxLength('255'),
                         Forms\Components\TextInput::make('email')
@@ -62,20 +64,20 @@ class PatientResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                ->searchable(),
-                Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('date_of_birth')
-                ->sortable(),
-                Tables\Columns\TextColumn::make('owner.name')
-                ->searchable(),
+                Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tipo'),
+                Tables\Columns\TextColumn::make('fecha de cumpleaños')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('dueño.nombre')
+                    ->searchable(),
             ])
             ->filters([
-                Tables\filters\SelectFilter::make('type')
+                Tables\filters\SelectFilter::make('tipo')
                     ->options([
-                        'cat' => 'Gato',
-                        'dog' => 'Perro',
-                        'rabbit' => 'Conejo',
+                        'Gato' => 'Gato',
+                        'Perro' => 'Perro',
+                        'Conejo' => 'Conejo',
                     ]),
             ])
             ->actions([
@@ -91,14 +93,14 @@ class PatientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TreatmentsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPatients::route('/'),
+            'index' => Pages\ListPatient::route('/'),
             'create' => Pages\CreatePatient::route('/create'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];
