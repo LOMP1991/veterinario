@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Owner extends Model
 {
-    
-    public function patients(): HasMany
+
+    public function pacientes(): HasMany
     {
         return $this->hasMany(Patient::class);
     }
-
 }
