@@ -47,12 +47,12 @@ class PatientResource extends Resource
                             ->required()
                             ->maxLength('255'),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email Address')
+                            ->label('Correo electrónico')
                             ->email()
                             ->required()
                             ->maxLength('255'),
                         Forms\Components\TextInput::make('phone')
-                            ->label('Phone number')
+                            ->label('Telefono')
                             ->tel()
                             ->required(),
                     ])
