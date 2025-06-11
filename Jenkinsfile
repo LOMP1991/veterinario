@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clonar repo') {
             steps {
-                git 'https://github.com/LOMP1991/veterinario.git'
+                git branch: 'main', url: 'https://github.com/LOMP1991/veterinario.git'
             }
         }
 
