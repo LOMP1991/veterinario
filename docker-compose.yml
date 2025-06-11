@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   app:
     build:
@@ -14,24 +15,4 @@ services:
       - "9000:9000"
     env_file:
       - .env
-    depends_on:
-      - db
 
-  db:
-    image: mysql:8.0
-    container_name: veterinario_db
-    restart: unless-stopped
-    env_file:
-      - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - dbdata:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-volumes:
-  dbdata:
