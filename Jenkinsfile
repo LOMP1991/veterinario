@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar repo') {
+            steps {
+                git 'https://github.com/LOMP1991/veterinario.git'
+            }
+        }
+
+        stage('Construir y levantar servicios') {
+            steps {
+                sh 'docker-compose up -d --build'
+            }
+        }
+
+        stage('Verificar contenedor app') {
+            steps {
+                sh 'docker ps'
+                sh 'docker-compose exec -T app php -v'
+            }
+        }
+
+        stage('Tests (si tienes)') {
+            steps {
+                sh 'docker-compose exec -T app ./vendor/bin/phpunit || true'
+            }
+        }
+
+        stage('Finalizar') {
+            steps {
+                sh 'docker-compose down'
+            }
+        }
+    }
+}
