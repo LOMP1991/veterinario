@@ -34,16 +34,16 @@ services:
       - "3306:3306"
 
   jenkins:
-    image: jenkins/jenkins:lts
-    container_name: jenkins
-    user: root
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - //var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
+  build:
+    context: ./jenkins-docker
+  container_name: jenkins
+  ports:
+    - "8080:8080"
+    - "50000:50000"
+  volumes:
+    - jenkins_home:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+
 
 volumes:
   dbdata:
