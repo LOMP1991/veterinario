@@ -4,7 +4,15 @@ pipeline {
     stages {
         stage('Clonar repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/LOMP1991/veterinario.git'
+                git branch: 'main', url: 'https://github.com/cmmurielo/veterinario.git'
+            }
+        }
+
+        stage('Copiar archivo .env') {
+            steps {
+                withCredentials([file(credentialsId: 'envfile', variable: 'DOTENV_FILE')]) {
+                    sh 'cp "$DOTENV_FILE" .env'
+                }
             }
         }
 
