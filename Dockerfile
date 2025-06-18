@@ -1,23 +1,40 @@
-# Usa una imagen base con PHP y Apache
 FROM php:8.2-apache
 
-# Instala dependencias del sistema y extensiones PHP necesarias
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    libzip-dev \
     zip \
-    && docker-php-ext-install zip pdo pdo_mysql
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql zip intl
 
-# Habilita el módulo de reescritura de Apache
+# Habilitar módulo de reescritura de Apache
 RUN a2enmod rewrite
 
-# Copia el contenido de tu aplicación al contenedor
-COPY . /var/www/html/
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Da permisos al contenido
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
+# Configurar Apache para que sirva desde /public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+# Copiar composer files e instalar dependencias
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
+
+# Copiar el resto del proyecto
+COPY . .
+
+# Asignar permisos adecuados
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-# Expone el puerto 80
+
+
 EXPOSE 80
