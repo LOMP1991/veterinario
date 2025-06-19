@@ -1,40 +1,24 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# Instalar dependencias del sistema
+# Dependencias del sistema
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    zip \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    libicu-dev \
-    && docker-php-ext-install pdo pdo_mysql zip intl
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev libicu-dev \
+    libjpeg-dev libfreetype6-dev libonig-dev libmcrypt-dev npm nodejs \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd intl
 
-# Habilitar módulo de reescritura de Apache
-RUN a2enmod rewrite
+# Instala Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instalar Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Establecer directorio de trabajo
+# Define el directorio de trabajo
 WORKDIR /var/www/html
-# Configurar Apache para que sirva desde /public
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-# Copiar composer files e instalar dependencias
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist
 
-# Copiar el resto del proyecto
+# Copia todo el proyecto al contenedor
 COPY . .
 
-# Asignar permisos adecuados
+# Da permisos a Laravel
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
 
+EXPOSE 9000
 
-
-EXPOSE 80
+CMD ["php-fpm"]

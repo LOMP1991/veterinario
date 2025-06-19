@@ -6,7 +6,7 @@ use App\Filament\Resources\PatientResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListPacientes extends ListRecords
+class ListPatients extends ListRecords
 {
     protected static string $resource = PatientResource::class;
 
