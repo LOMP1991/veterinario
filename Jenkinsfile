@@ -8,6 +8,15 @@ pipeline {
             }
         }
 
+        stage('Copiar archivo .env') {
+            steps {
+                withCredentials([file(credentialsId: 'dotenv', variable: 'DOTENV_FILE')]) {
+                    sh 'cp "$DOTENV_FILE" .env'
+                }
+            }
+        }
+
+
         stage('Construir y levantar servicios') {
             steps {
                 sh 'docker-compose up -d --build'
