@@ -24,38 +24,30 @@ class PatientResource extends Resource
     {
         return $form
             ->schema([
-            Forms\Components\TextInput::make('nombre')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('tipo')
-                    ->options([
-                        'gato' => 'Gato',
-                        'perro' => 'Perro',
-                        'conejo' => 'Conejo',
-                    ])
-                    ->required(),
-                Forms\Components\DatePicker::make('Fecha de cumpleaños')
-                    ->required()
-                    ->maxDate(now()),
-                Forms\Components\Select::make('owner_id')
-                    ->relationship('owner', 'nombre')
-                    ->searchable()
-                    ->preload()
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('Nombre')
-                            ->required()
-                            ->maxLength('255'),
-                        Forms\Components\TextInput::make('email')
-                            ->label('Correo electrónico')
-                            ->email()
-                            ->required()
-                            ->maxLength('255'),
-                        Forms\Components\TextInput::make('phone')
-                            ->label('Telefono')
-                            ->tel()
-                            ->required(),
-                    ])
-                    ->required()
+            TextInput::make('nombre')
+                ->required()
+                ->maxLength(255),
+
+            DatePicker::make('date_of_birth')
+                ->label('Fecha de nacimiento')
+                ->required(),
+
+            Select::make('owner_id')
+                ->relationship('owner', 'nombre')
+                ->label('Dueño')
+                ->required(),
+
+            Select::make('tipo')
+            ->label('Tipo de paciente')
+            ->required()
+            ->options([
+                'perro' => 'Perro',
+                'gato' => 'Gato',
+                'conejo' => 'Conejo',
+                'ave' => 'Ave',
+                'otro' => 'Otro',
+            ])
+            ->searchable(),
         ]);
     }
 
