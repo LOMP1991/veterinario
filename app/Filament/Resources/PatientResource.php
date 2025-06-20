@@ -3,104 +3,77 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PatientResource\Pages;
-use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Models\Patient;
-use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 
 class PatientResource extends Resource
 {
     protected static ?string $model = Patient::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $navigationLabel = 'Pacientes';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nombre')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('tipo')
-                    ->options([
-                        'gato' => 'Gato',
-                        'perro' => 'Perro',
-                        'conejo' => 'Conejo',
-                    ])
-                    ->required(),
-                Forms\Components\DatePicker::make('Fecha de cumpleaños')
-                    ->required()
-                    ->maxDate(now()),
-                Forms\Components\Select::make('dueño_id')
-                    ->relationship('dueño', 'nombre')
-                    ->searchable()
-                    ->preload()
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('Nombre')
-                            ->required()
-                            ->maxLength('255'),
-                        Forms\Components\TextInput::make('email')
-                            ->label('Correo electrónico')
-                            ->email()
-                            ->required()
-                            ->maxLength('255'),
-                        Forms\Components\TextInput::make('phone')
-                            ->label('Telefono')
-                            ->tel()
-                            ->required(),
-                    ])
-                    ->required()
-            ]);
+            TextInput::make('nombre')
+                ->required()
+                ->maxLength(255),
+
+            DatePicker::make('date_of_birth')
+                ->label('Fecha de nacimiento')
+                ->required(),
+
+            Select::make('owner_id')
+                ->relationship('owner', 'nombre')
+                ->label('Dueño')
+                ->required(),
+
+            Select::make('tipo')
+            ->label('Tipo de paciente')
+            ->required()
+            ->options([
+                'perro' => 'Perro',
+                'gato' => 'Gato',
+                'conejo' => 'Conejo',
+                'ave' => 'Ave',
+                'otro' => 'Otro',
+            ])
+            ->searchable(),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('nombre')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tipo'),
-                Tables\Columns\TextColumn::make('fecha de cumpleaños')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('dueño.nombre')
-                    ->searchable(),
-            ])
-            ->filters([
-                Tables\filters\SelectFilter::make('tipo')
-                    ->options([
-                        'Gato' => 'Gato',
-                        'Perro' => 'Perro',
-                        'Conejo' => 'Conejo',
-                    ]),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\TreatmentsRelationManager::class,
-        ];
+        return $table->columns([
+            Tables\Columns\TextColumn::make('nombre')->sortable()->searchable(),
+            Tables\Columns\TextColumn::make('date_of_birth')->label('Fecha de nacimiento'),
+            Tables\Columns\TextColumn::make('owner.nombre')->label('Dueño'),
+            Tables\Columns\TextColumn::make('tipo'),
+            Tables\Columns\TextColumn::make('created_at')->label('Creado')->dateTime(),
+        ])
+        ->filters([])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\DeleteBulkAction::make(),
+        ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPacientes::route('/'),
+            'index' => Pages\ListPatients::route('/'),
             'create' => Pages\CreatePatient::route('/create'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];

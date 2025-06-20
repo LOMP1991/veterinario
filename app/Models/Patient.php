@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
-    public function dueño(): BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(Owner::class);
     }
