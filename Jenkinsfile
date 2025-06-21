@@ -29,7 +29,7 @@ pipeline {
             }
         }
 
-        stage('Tests (si tienes)') {
+        stage('Tests') {
             steps {
                 sh 'docker compose exec -T app ./vendor/bin/phpunit || true'
             }
