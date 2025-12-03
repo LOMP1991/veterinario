@@ -1,66 +1,171 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏥 Sistema de Gestión para Clínica Veterinaria
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Panel de administración completo para gestionar pacientes, dueños y tratamientos en una clínica veterinaria, desarrollado con Laravel 12 y FilamentPHP 3.
 
-## About Laravel
+## ✨ Características
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 📋 **Gestión de Pacientes**: Registro completo de mascotas con información detallada
+- 👥 **Gestión de Dueños**: Control de datos de contacto y relación con mascotas
+- 💊 **Gestión de Tratamientos**: Historial médico y seguimiento de tratamientos aplicados
+- 🔍 **Búsqueda y Filtrado**: Encuentra rápidamente pacientes y dueños
+- 📊 **Ordenamiento de Datos**: Organiza la información por diferentes criterios
+- 🎨 **Interfaz Moderna**: Panel administrativo intuitivo con FilamentPHP
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Tecnologías
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Laravel** 12
+- **FilamentPHP** 3
+- **PHP** 8.2+
+- **MySQL** / PostgreSQL
+- **Composer**
 
-## Learning Laravel
+## 📋 Requisitos Previos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP >= 8.2
+- Composer
+- MySQL >= 8.0 o PostgreSQL >= 13
+- Node.js y NPM (para compilar assets)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Instalación
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clonar el repositorio**
+```bash
+git clone https://github.com/tu-usuario/veterinary-clinic.git
+cd veterinary-clinic
+```
 
-## Laravel Sponsors
+2. **Instalar dependencias**
+```bash
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Configurar variables de entorno**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### Premium Partners
+4. **Configurar base de datos**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Edita el archivo `.env` con tus credenciales:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=veterinary_clinic
+DB_USERNAME=tu_usuario
+DB_PASSWORD=tu_contraseña
+```
 
-## Contributing
+5. **Ejecutar migraciones**
+```bash
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Crear usuario administrador**
+```bash
+php artisan make:filament-user
+```
 
-## Code of Conduct
+7. **Compilar assets**
+```bash
+npm run dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+8. **Iniciar servidor**
+```bash
+php artisan serve
+```
 
-## Security Vulnerabilities
+Accede al panel en: `http://localhost:8000/admin`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📊 Estructura de la Base de Datos
 
-## License
+### Entidades Principales
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Owners** (Dueños): Información de contacto de los propietarios
+- **Patients** (Pacientes): Datos de las mascotas
+- **Treatments** (Tratamientos): Historial médico y procedimientos
+
+### Relaciones
+
+- Un `Owner` tiene muchos `Patients` (1:N)
+- Un `Patient` pertenece a un `Owner`
+- Un `Patient` puede tener muchos `Treatments` (1:N)
+- Un `Treatment` pertenece a un `Patient`
+
+## 🎯 Funcionalidades Principales
+
+### Gestión de Pacientes
+- Registro de nombre, tipo (gato, perro, conejo), fecha de nacimiento
+- Asignación a dueños existentes o creación de nuevos
+- Búsqueda por nombre y nombre del dueño
+- Ordenamiento por fecha de nacimiento
+- Filtrado por tipo de animal
+
+### Gestión de Dueños
+- Creación rápida desde el formulario del paciente
+- Almacenamiento de nombre, email y teléfono
+- Búsqueda integrada con precarga
+
+### Gestión de Tratamientos
+- Descripción detallada del tratamiento
+- Notas adicionales
+- Precio con formato de moneda (EUR)
+- Fecha y hora de aplicación
+- Gestión directa desde la página del paciente
+
+## 🔒 Seguridad
+
+El proyecto utiliza las siguientes medidas de seguridad:
+
+- Validación de formularios en servidor
+- Protección CSRF habilitada
+- Autenticación requerida para acceder al panel
+- Validación de tipos de datos y longitudes
+
+## 🧪 Buenas Prácticas Implementadas
+
+- Modelos en inglés, singular y PascalCase
+- Relaciones Eloquent bien definidas
+- Validaciones en formularios
+- Uso de migraciones para versionado de BD
+- Separación de responsabilidades
+
+## 📝 Próximas Mejoras
+
+- [ ] Widgets de estadísticas
+- [ ] Personalización del panel (colores, iconos)
+- [ ] Sistema de roles y permisos con Spatie
+- [ ] Exportación de reportes
+- [ ] Notificaciones por email
+- [ ] Recordatorios de citas
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## 👨‍💻 Autor
+
+OrlandoMp - [@LOMP1991/)
+
+## 🙏 Agradecimientos
+
+- [Laravel](https://laravel.com)
+- [FilamentPHP](https://filamentphp.com)
+- Comunidad de desarrolladores Laravel
+
+---
+
+⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub
